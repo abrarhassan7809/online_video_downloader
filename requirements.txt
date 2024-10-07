@@ -1,0 +1,8 @@
+yt-dlp
+fastapi
+uvicorn
+Jinja2
+python-multipart
+nltk
+numpy
+torch
