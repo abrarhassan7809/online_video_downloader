@@ -1,15 +1,15 @@
-from nltk_utils import bag_of_words, tokenize
-from model import NeuralNet
+from chatbot.nltk_utils import bag_of_words, tokenize
+from chatbot.model import NeuralNet
 import random
 import json
 import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-with open('intents.json', 'r') as f:
+with open('chatbot/intents.json', 'r') as f:
     intents = json.load(f)
 
-FILE = "data.pth"
+FILE = "chatbot/data.pth"
 data = torch.load(FILE)
 
 model_state = data['model_state']
@@ -24,13 +24,8 @@ model.load_state_dict(model_state)
 model.eval()
 
 bot_name = "Atoms"
-print("Let's chat! type 'quit' to exit")
-while True:
-    sentence = input("You: ")
-    if sentence == "quit":
-        break
-
-    sentence = tokenize(sentence)
+def get_response(msg):
+    sentence = tokenize(msg)
     X = bag_of_words(sentence, all_words)
     X = X.reshape(1, X.shape[0])
     X = torch.from_numpy(X)
@@ -45,7 +40,6 @@ while True:
     if prob.item() > 0.75:
         for intent in intents['intents']:
             if tag == intent['tag']:
-                print(f"{bot_name}: {random.choice(intent['responses'])}")
+                return random.choice(intent['responses'])
 
-    else:
-        print(f"{bot_name}: I don't understand you...")
+    return "I don't understand you..."
