@@ -2,75 +2,285 @@
   "intents": [
     {
       "tag": "greeting",
-      "patterns": ["Hi", "Hey", "How are you", "Is anyone there?", "Hello", "Good day"],
+      "patterns": [
+        "Hi", "Hey", "How are you?", "Is anyone there?", "Hello", "Good day", "Greetings",
+        "Howdy", "Yo", "What's up?", "How's it going?", "Hey, how are you?", "Hi there"
+      ],
       "responses": [
-        "Hey :-)",
-        "Hello, thanks for visiting",
-        "Hi there, what can I do for you?",
-        "Hi there, how can I help?"
+        "Hey there! How can I assist you today?",
+        "Hello! Thanks for visiting. What can I do for you?",
+        "Hi there! How can I help you today?",
+        "Hi! Feel free to ask me anything.",
+        "Hey! How's your day going so far?",
+        "Greetings! How can I assist you?"
       ]
     },
     {
       "tag": "goodbye",
-      "patterns": ["Bye", "See you later", "Goodbye"],
+      "patterns": [
+        "Bye", "See you later", "Goodbye", "I'm leaving", "Talk to you soon", "Catch you later",
+        "Gotta go", "See you around", "Take care", "I’m out", "Later!"
+      ],
       "responses": [
-        "See you later, thanks for visiting",
-        "Have a nice day",
-        "Bye! Come back again soon."
+        "See you later! Thanks for stopping by.",
+        "Take care and have a great day!",
+        "Goodbye! Feel free to reach out anytime.",
+        "Bye! Hope to chat with you again soon.",
+        "Farewell! Have a great one."
       ]
     },
     {
       "tag": "thanks",
-      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
-      "responses": ["Happy to help!", "Any time!", "My pleasure"]
+      "patterns": [
+        "Thanks", "Thank you", "That's helpful", "Thanks a lot", "I appreciate it", "Much appreciated",
+        "You're a lifesaver", "Thank you so much", "Thanks for the help", "Cheers", "Big thanks!"
+      ],
+      "responses": [
+        "You're welcome! Always happy to help.",
+        "Glad I could assist! Feel free to ask if you need anything else.",
+        "Anytime! I'm here to help.",
+        "No problem at all! Let me know if you need more help.",
+        "You're very welcome!"
+      ]
     },
     {
       "tag": "items",
       "patterns": [
-        "Which items do you have?",
-        "What kinds of items are there?",
-        "What do you sell?"
+        "Which items do you have?", "What kinds of items are there?", "What do you sell?",
+        "What products are available?", "What can I buy here?", "What kind of stuff do you offer?",
+        "What are you selling?", "What do you have?", "What’s in stock?"
       ],
       "responses": [
-        "We sell coffee and tea",
-        "We have coffee and tea"
+        "We sell a variety of beverages like coffee and tea, along with some delicious snacks.",
+        "Our main products are coffee and tea, but we also have some light snacks!",
+        "You'll find coffee, tea, and some awesome snacks in our store.",
+        "We offer various types of coffee and tea, as well as snacks to go along with your drink."
       ]
     },
     {
       "tag": "payments",
       "patterns": [
-        "Do you take credit cards?",
-        "Do you accept Mastercard?",
-        "Can I pay with Paypal?",
-        "Are you cash only?"
+        "Do you take credit cards?", "Do you accept Mastercard?", "Can I pay with Paypal?",
+        "Are you cash only?", "What payment methods do you accept?", "Can I use a credit card?",
+        "Do you accept cash?", "What forms of payment do you take?", "How can I pay?",
+        "Do you accept Apple Pay?"
       ],
       "responses": [
-        "We accept VISA, Mastercard and Paypal",
-        "We accept most major credit cards, and Paypal"
+        "We accept a variety of payment methods including VISA, Mastercard, and Paypal.",
+        "You can pay with major credit cards like VISA, Mastercard, or use Paypal.",
+        "We accept most major credit cards, cash, and even Paypal for your convenience.",
+        "Yes, we accept Mastercard, VISA, Paypal, and most major payment methods."
       ]
     },
     {
       "tag": "delivery",
       "patterns": [
-        "How long does delivery take?",
-        "How long does shipping take?",
-        "When do I get my delivery?"
+        "How long does delivery take?", "How long does shipping take?", "When do I get my delivery?",
+        "What's the delivery time?", "How soon can I get my order?", "Is there fast delivery?",
+        "How quickly do you ship?", "What's your delivery policy?", "When will my package arrive?"
       ],
       "responses": [
-        "Delivery takes 2-4 days",
-        "Shipping takes 2-4 days"
+        "Delivery usually takes 2-4 days depending on your location.",
+        "Our shipping time is between 2-4 days, but it might vary slightly based on your location.",
+        "Expect delivery within 2-4 days. Let me know if you need more details!",
+        "Standard delivery usually takes 2-4 days, but faster options are available."
+      ]
+    },
+    {
+      "tag": "order_status",
+      "patterns": [
+        "Where is my order?", "Can I track my order?", "What’s the status of my order?",
+        "When will my order arrive?", "Is my order on the way?", "How can I check my order status?",
+        "Can I check where my order is?", "Track my package", "Has my order shipped?"
+      ],
+      "responses": [
+        "You can track your order using the link sent to your email.",
+        "The current status of your order can be checked through the tracking link provided via email.",
+        "Feel free to check your order status using the tracking number provided after purchase.",
+        "You can track the progress of your order through the tracking link we sent you."
+      ]
+    },
+    {
+      "tag": "store_hours",
+      "patterns": [
+        "What are your hours?", "When are you open?", "What time do you close?",
+        "What’s your schedule?", "When does the store open?", "Can I come in now?",
+        "Are you open?", "What time are you open until?", "Are you open today?"
+      ],
+      "responses": [
+        "We're open from 9 AM to 9 PM every day of the week.",
+        "Our store hours are 9 AM to 9 PM. Feel free to visit us anytime within these hours!",
+        "We operate daily from 9 AM to 9 PM. Looking forward to seeing you!",
+        "We're open from 9 AM to 9 PM, so feel free to drop by!"
+      ]
+    },
+    {
+      "tag": "support",
+      "patterns": [
+        "I need help", "Can you assist me?", "I have an issue", "Need some assistance",
+        "Is support available?", "I have a problem", "Who can help me?",
+        "Can you help me with something?", "I need some support"
+      ],
+      "responses": [
+        "I'm here to assist you with anything you need. How can I help?",
+        "Feel free to tell me your issue, and I'll do my best to help.",
+        "I'm here to support you. Let me know how I can assist you.",
+        "I'm happy to help! Please describe your issue, and I’ll assist you."
+      ]
+    },
+    {
+      "tag": "smalltalk",
+      "patterns": [
+        "How's the weather?", "What's up?", "How's your day?", "What are you up to?",
+        "How's it going?", "How are things?", "What's going on?", "Anything interesting today?"
+      ],
+      "responses": [
+        "I’m just a bot, but I’m here to help you with anything you need!",
+        "All systems go! How can I assist you today?",
+        "Just hanging out, waiting for some great questions! How about you?",
+        "I’m doing well, thank you for asking! What can I do for you today?"
+      ]
+    },
+    {
+      "tag": "daily_routines",
+      "patterns": [
+        "What's your daily routine?", "What do you do in a day?", "How's your day?",
+        "How do you spend your day?", "Tell me about your daily schedule",
+        "What’s your routine like?", "How do you start your day?"
+      ],
+      "responses": [
+        "As a chatbot, my routine involves helping people like you! I'm always here to answer questions.",
+        "I don't really have a routine like humans, but I’m always ready to assist!",
+        "My day mostly consists of answering questions and learning new things to help people better.",
+        "I don’t need coffee to start my day, but I’m always ready to chat!",
+        "I’m here all day, every day, waiting to help out!"
+      ]
+    },
+    {
+      "tag": "work",
+      "patterns": [
+        "How's work going?", "What's your job?", "What do you do?", "How's work?",
+        "What’s your work like?", "What is your profession?", "Do you enjoy your job?",
+        "Are you working right now?", "What are you working on?"
+      ],
+      "responses": [
+        "My job is to help answer questions and make your life easier. How can I assist you?",
+        "I’m always at work! My goal is to assist you with anything you need.",
+        "Work's going great! I’m always here to help you with information or a chat.",
+        "I work non-stop as a chatbot, and I love answering questions. What can I do for you?",
+        "I’m programmed to help with all kinds of inquiries, so I’m always ready to work!"
+      ]
+    },
+    {
+      "tag": "jokes",
+      "patterns": [
+        "Tell me a joke", "Make me laugh", "Say something funny", "Got any jokes?",
+        "Tell me something funny", "Can you joke?", "Give me a joke", "Cheer me up with a joke"
+      ],
+      "responses": [
+        "Why don’t skeletons fight each other? They don’t have the guts.",
+        "Why don’t scientists trust atoms? Because they make up everything.",
+        "I told my computer I needed a break, and now it won’t stop sending me Kit-Kat ads!",
+        "Why did the coffee file a police report? It got mugged!",
+        "Did you hear about the mathematician who’s afraid of negative numbers? He'll stop at nothing to avoid them."
+      ]
+    },
+    {
+      "tag": "medical_symptoms",
+      "patterns": [
+        "I have a headache", "I'm feeling sick", "I have a cold", "Why do I feel tired?",
+        "What are the symptoms of flu?", "I have a fever", "I'm not feeling well",
+        "What can I do for a cough?", "How do I treat a cold?"
+      ],
+      "responses": [
+        "I’m not a doctor, but staying hydrated and resting can help with most mild symptoms. Always consult a healthcare professional for medical advice.",
+        "For a headache, try resting, drinking water, and avoiding screens for a while. If symptoms persist, consult a doctor.",
+        "If you're feeling unwell, I recommend seeing a healthcare provider to get an accurate diagnosis.",
+        "I suggest taking care of yourself by getting enough rest and fluids. For serious symptoms, consult a healthcare professional.",
+        "For a cough, try drinking warm fluids and resting. If it continues, see a doctor."
+      ]
+    },
+    {
+      "tag": "medical_conditions",
+      "patterns": [
+        "What is diabetes?", "Tell me about hypertension", "What causes high blood pressure?",
+        "What is asthma?", "What are the symptoms of diabetes?", "How do you treat asthma?",
+        "What’s the treatment for high blood pressure?", "What is heart disease?", "What is obesity?"
+      ],
+      "responses": [
+        "Diabetes is a condition where the body has difficulty regulating blood sugar. It's best managed with medical advice from a doctor.",
+        "Hypertension, or high blood pressure, often requires lifestyle changes and medication. Always consult a healthcare professional.",
+        "Asthma is a condition affecting the airways, and it can be managed with inhalers and avoiding triggers. Talk to a doctor for personalized advice.",
+        "Heart disease refers to various heart conditions, usually related to clogged blood vessels. Prevention includes a healthy diet and regular checkups.",
+        "Obesity is a condition characterized by excessive body fat. Managing it often involves diet, exercise, and medical supervision."
+      ]
+    },
+    {
+      "tag": "diagnosis",
+      "patterns": [
+        "How do you diagnose a cold?", "How do you check for the flu?", "What are common symptoms of a fever?",
+        "How do you know if you have allergies?", "What’s the best way to treat a sore throat?",
+        "Can you tell if I have a fever?", "How do you diagnose diabetes?", "What tests are done for hypertension?"
+      ],
+      "responses": [
+        "For diagnosis of any condition, it’s always best to consult a healthcare professional. They can perform tests and provide personalized advice.",
+        "Symptoms like fever, sore throat, or cough may suggest a cold or flu, but only a doctor can diagnose and recommend treatment.",
+        "You can check for a fever using a thermometer, but if symptoms persist, see a doctor.",
+        "Allergies often involve sneezing, a runny nose, or itchy eyes. A doctor can run allergy tests for a proper diagnosis.",
+        "For sore throats, warm tea or gargling salt water can help. If the soreness persists, it’s best to see a doctor."
       ]
     },
     {
       "tag": "funny",
       "patterns": [
-        "Tell me a joke!",
-        "Tell me something funny!",
-        "Do you know a joke?"
+        "Tell me a joke!", "Tell me something funny!", "Do you know a joke?",
+        "Make me laugh", "Can you say something funny?", "Got any jokes?", "Make me smile"
       ],
       "responses": [
-        "Why did the hipster burn his mouth? He drank the coffee before it was cool.",
-        "What did the buffalo say when his son left for college? Bison."
+        "Why don’t skeletons fight each other? They don’t have the guts.",
+        "What do you get when you cross a snowman and a vampire? Frostbite.",
+        "Why did the math book look sad? Because it had too many problems.",
+        "I would tell you a joke about an elevator, but it’s an uplifting experience."
+      ]
+    },
+    {
+      "tag": "coffee_preferences",
+      "patterns": [
+        "What's your favorite coffee?", "Do you like coffee?", "Which coffee is the best?",
+        "What kind of coffee do you recommend?", "Can you suggest a coffee?", "What's the best coffee here?"
+      ],
+      "responses": [
+        "I’d recommend a strong espresso to get your day going!",
+        "If you like something smooth, a cappuccino would be a great choice.",
+        "Our house blend is quite popular – it has a nice balance of flavor and strength.",
+        "For something bold, I’d suggest trying our dark roast."
+      ]
+    },
+    {
+      "tag": "feelings",
+      "patterns": [
+        "How are you feeling?", "Are you happy?", "Do you feel emotions?", "How's your mood?",
+        "Do you have feelings?", "What's your mood like?", "Are you okay?"
+      ],
+      "responses": [
+        "I’m just a bunch of code, but thanks for asking! How about you?",
+        "I don’t have emotions like humans, but I’m always here to help!",
+        "I’m feeling... well, like a chatbot! How are you feeling today?",
+        "I don't have feelings, but I'm programmed to be helpful and friendly."
+      ]
+    },
+    {
+      "tag": "weather",
+      "patterns": [
+        "What's the weather like?", "Is it going to rain today?", "What's the weather forecast?",
+        "How's the weather outside?", "Tell me about the weather", "Is it sunny today?",
+        "What's the temperature?", "Is it hot today?", "Do I need an umbrella today?"
+      ],
+      "responses": [
+        "I'm not connected to live weather services at the moment, but you can check your local forecast for the latest updates!",
+        "I don’t have live weather data right now, but I can tell you it’s always sunny here in chatbot world!",
+        "Sorry, I can't check the weather at the moment, but a quick search online should give you the latest forecast!",
+        "I wish I could check the weather for you, but try asking your phone or a weather app!"
       ]
     }
   ]

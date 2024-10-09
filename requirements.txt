@@ -4,7 +4,10 @@ uvicorn
 Jinja2
 python-multipart
 nltk
-numpy
+bs4
 torch
-flask
 torchvision
+starlette
+requests
+beautifulsoup4
+tqdm

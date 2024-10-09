@@ -3,7 +3,7 @@ from fastapi import HTTPException
 import os
 
 
-def download_video(url: str, output_path: str = "downloads") -> str:
+async def download_video(url: str, output_path: str = "downloads"):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
