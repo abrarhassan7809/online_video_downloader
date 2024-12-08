@@ -10,4 +10,6 @@ torchvision
 starlette
 requests
 beautifulsoup4
+instaloader
 tqdm
+# pip install -U yt-dlp
