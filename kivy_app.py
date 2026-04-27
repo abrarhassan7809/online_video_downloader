@@ -1,30 +1,25 @@
 import os
 import threading
-import sys
+import ssl
 from kivy.utils import platform
 from kivy.clock import mainthread
 from kivy.lang import Builder
 from kivy.core.window import Window
-from kivy.properties import StringProperty, BooleanProperty
+from kivy.properties import StringProperty, ColorProperty
 from plyer import notification
 
 from kivymd.app import MDApp
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.list import OneLineListItem
 
 import yt_dlp
-import ssl
 
-# Disable SSL warnings
+# SSL & Android Setup
 ssl._create_default_https_context = ssl._create_unverified_context
-
-# Android Setup
 if platform == 'android':
     from android.permissions import request_permissions, Permission
     from jnius import autoclass
 
 
-# Logger class
 class MyLogger:
     def debug(self, msg): pass
 
@@ -35,119 +30,128 @@ class MyLogger:
 
 KV = """
 MDScreen:
-    md_bg_color: app.theme_cls.bg_normal
+    md_bg_color: app.bg_color
 
     MDBoxLayout:
         orientation: 'vertical'
-        padding: ["10dp", "0dp", "10dp", "10dp"]
-        spacing: "0dp"
+        padding: "15dp"
+        spacing: "15dp"
 
         # Top Bar
-        MDBoxLayout:
+        MDCard:
             size_hint_y: None
-            height: "60dp"
-            padding: ["5dp", 0]
-            MDLabel:
-                text: "NexDownloader Pro"
-                font_style: "H6"
-                bold: True
-                theme_text_color: "Custom"
-                text_color: (0.91, 0.27, 0.37, 1)
+            height: "70dp"
+            padding: "15dp"
+            radius: [20,]
+            md_bg_color: app.card_color
+            elevation: 1
 
-            MDIconButton:
-                icon: "brightness-4" if app.theme_cls.theme_style == "Dark" else "brightness-7"
-                on_release: app.toggle_theme()
+            MDBoxLayout:
+                MDLabel:
+                    text: "NEX DOWNLOADER"
+                    font_style: "H6"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: [0.91, 0.27, 0.37, 1]
 
-        # Main Card
+                MDIconButton:
+                    icon: "brightness-4" if app.theme_cls.theme_style == "Dark" else "brightness-7"
+                    theme_icon_color: "Custom"
+                    icon_color: [0.91, 0.27, 0.37, 1]
+                    on_release: app.toggle_theme()
+
+        # Main Input Card
         MDCard:
             orientation: "vertical"
             padding: "20dp"
             spacing: "20dp"
-            radius: [25, 25, 25, 25]
-            elevation: 2
+            radius: [25,]
+            md_bg_color: app.card_color
             size_hint_y: None
             height: self.minimum_height
-            md_bg_color: app.theme_cls.bg_dark if app.theme_cls.theme_style == "Dark" else [0.98, 0.98, 0.98, 1]
+            elevation: 2
 
             MDTextField:
                 id: url_input
-                hint_text: "Paste YouTube Link Here"
-                mode: "rectangle"
-                icon_left: "link-variant"
+                hint_text: "Paste YouTube Link"
+                mode: "fill"
+                fill_color_normal: app.input_bg
+                icon_left: "youtube-subscription"
+                text_color_normal: app.text_color
+                hint_text_color_normal: [0.5, 0.5, 0.5, 1]
 
             MDBoxLayout:
                 size_hint_y: None
                 height: "50dp"
-                spacing: "15dp"
+                spacing: "10dp"
 
                 MDRaisedButton:
                     id: type_button
-                    text: "Format: Video"
-                    size_hint_x: 0.5
-                    md_bg_color: (0.91, 0.27, 0.37, 1)
+                    text: "Video"
+                    size_hint_x: 1
+                    md_bg_color: app.btn_secondary
                     on_release: app.type_menu.open()
 
                 MDRaisedButton:
                     id: quality_button
-                    text: "Quality: 720p"
-                    size_hint_x: 0.5
-                    md_bg_color: (0.1, 0.3, 0.5, 1)
+                    text: "720p"
+                    size_hint_x: 1
+                    md_bg_color: app.btn_secondary
                     on_release: app.quality_menu.open()
 
-            # Start/Cancel Button
+            # Action Buttons
             MDBoxLayout:
                 size_hint_y: None
-                height: "55dp"
-                id: btn_container
+                height: "60dp"
+                id: btn_box
 
-                MDRaisedButton:
+                MDFillRoundFlatButton:
                     id: download_btn
                     text: "START DOWNLOAD"
-                    size_hint_x: 1
-                    height: "55dp"
-                    md_bg_color: (0.91, 0.27, 0.37, 1)
-                    bold: True
+                    size_hint: (1, 1)
+                    md_bg_color: [0.91, 0.27, 0.37, 1]
                     on_release: app.start_download()
 
-                MDRaisedButton:
+                MDRoundFlatButton:
                     id: cancel_btn
-                    text: "CANCEL"
-                    size_hint_x: 0
+                    text: "STOP"
+                    size_hint: (0, 1)
                     opacity: 0
                     disabled: True
-                    height: "55dp"
-                    md_bg_color: (0.5, 0.5, 0.5, 1)
+                    text_color: app.text_color
+                    line_color: [0.91, 0.27, 0.37, 1]
                     on_release: app.cancel_download()
 
-            # Progress Section
-            MDBoxLayout:
-                orientation: "vertical"
-                adaptive_height: True
-                spacing: "10dp"
-                padding: [0, "30dp", 0, 0]
-
-                MDLabel:
-                    id: progress_label
-                    text: "0%"
-                    halign: "center"
-                    font_style: "H4"
-                    bold: True
-                    theme_text_color: "Custom"
-                    text_color: (0.2, 1, 0.5, 1)
-
-                MDProgressBar:
-                    id: progress_bar
-                    value: 0
-                    max: 100
-                    size_hint_y: None
-                    height: "10dp"
+        # Progress Section
+        MDCard:
+            orientation: "vertical"
+            padding: "20dp"
+            radius: [25,]
+            md_bg_color: app.card_color
+            size_hint_y: None
+            height: "150dp"
 
             MDLabel:
                 id: status_label
-                text: "Ready to download!"
+                text: "Waiting for Link..."
                 halign: "center"
                 theme_text_color: "Secondary"
                 font_style: "Caption"
+
+            MDLabel:
+                id: progress_label
+                text: "0%"
+                halign: "center"
+                font_style: "H4"
+                bold: True
+                theme_text_color: "Custom"
+                text_color: app.text_color
+
+            MDProgressBar:
+                id: progress_bar
+                value: 0
+                max: 100
+                color: [0.91, 0.27, 0.37, 1]
 
         Widget:
             size_hint_y: 1
@@ -159,247 +163,132 @@ class NexDownloaderApp(MDApp):
     selected_quality = StringProperty("720")
     should_cancel = False
 
+    # Theme Properties for Dynamic Update
+    bg_color = ColorProperty([0.05, 0.05, 0.05, 1])
+    card_color = ColorProperty([0.12, 0.12, 0.12, 1])
+    text_color = ColorProperty([1, 1, 1, 1])
+    input_bg = ColorProperty([0.15, 0.15, 0.15, 1])
+    btn_secondary = ColorProperty([0.2, 0.2, 0.2, 1])
+
     def build(self):
-        self.theme_cls.primary_palette = "Red"
         self.theme_cls.theme_style = "Dark"
-        if platform != 'android':
-            Window.size = (400, 750)
+        self.theme_cls.primary_palette = "Red"
+        if platform != 'android': Window.size = (400, 700)
         return Builder.load_string(KV)
+
+    def toggle_theme(self):
+        if self.theme_cls.theme_style == "Dark":
+            self.theme_cls.theme_style = "Light"
+            self.bg_color = [0.95, 0.95, 0.95, 1]
+            self.card_color = [1, 1, 1, 1]
+            self.text_color = [0, 0, 0, 1]
+            self.input_bg = [0.9, 0.9, 0.9, 1]
+            self.btn_secondary = [0.8, 0.8, 0.8, 1]
+        else:
+            self.theme_cls.theme_style = "Dark"
+            self.bg_color = [0.05, 0.05, 0.05, 1]
+            self.card_color = [0.12, 0.12, 0.12, 1]
+            self.text_color = [1, 1, 1, 1]
+            self.input_bg = [0.15, 0.15, 0.15, 1]
+            self.btn_secondary = [0.2, 0.2, 0.2, 1]
 
     def on_start(self):
         self.setup_menus()
         if platform == 'android':
-            # Request permissions
-            request_permissions([
-                Permission.INTERNET,
-                Permission.WRITE_EXTERNAL_STORAGE,
-                Permission.READ_EXTERNAL_STORAGE
-            ])
-            self.show_notification("✅ App Ready! Files will be saved in Android/media/")
+            request_permissions(
+                [Permission.INTERNET, Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
 
     def setup_menus(self):
-        type_items = [
-            {"viewclass": "OneLineListItem", "text": "Video", "on_release": lambda x="Video": self.set_type(x)},
-            {"viewclass": "OneLineListItem", "text": "Audio (MP3)",
-             "on_release": lambda x="Audio (MP3)": self.set_type(x)}
-        ]
-        self.type_menu = MDDropdownMenu(caller=self.root.ids.type_button, items=type_items, width_mult=4)
+        t_items = [{"viewclass": "OneLineListItem", "text": i, "on_release": lambda x=i: self.set_type(x)} for i in
+                   ["Video", "Audio (MP3)"]]
+        self.type_menu = MDDropdownMenu(caller=self.root.ids.type_button, items=t_items, width_mult=3)
 
-        qualities = ["360p", "480p", "720p", "1080p"]
-        quality_items = [{"viewclass": "OneLineListItem", "text": q, "on_release": lambda x=q: self.set_quality(x)} for
-                         q in qualities]
-        self.quality_menu = MDDropdownMenu(caller=self.root.ids.quality_button, items=quality_items, width_mult=3)
+        q_items = [{"viewclass": "OneLineListItem", "text": i, "on_release": lambda x=i: self.set_quality(x)} for i in
+                   ["360p", "480p", "720p", "1080p"]]
+        self.quality_menu = MDDropdownMenu(caller=self.root.ids.quality_button, items=q_items, width_mult=3)
 
     def set_type(self, text):
         self.selected_type = text
-        self.root.ids.type_button.text = f"Format: {text}"
+        self.root.ids.type_button.text = text
         self.type_menu.dismiss()
 
     def set_quality(self, text):
         self.selected_quality = text.replace('p', '')
-        self.root.ids.quality_button.text = f"Quality: {text}"
+        self.root.ids.quality_button.text = text
         self.quality_menu.dismiss()
 
     def start_download(self):
         url = self.root.ids.url_input.text.strip()
-        if not url:
-            self.show_notification("❌ Please enter a URL")
-            return
+        if not url: return
         self.should_cancel = False
-        self.toggle_buttons(True)
+        self.toggle_ui(True)
         threading.Thread(target=self.download_engine, args=(url,), daemon=True).start()
 
     def progress_hook(self, d):
-        """yt-dlp progress hook"""
-        if self.should_cancel:
-            raise Exception("Download cancelled by user")
-
+        if self.should_cancel: raise Exception("CANCELLED")
         if d['status'] == 'downloading':
-            try:
-                # Calculate percentage
-                if 'total_bytes' in d:
-                    total = d['total_bytes']
-                    downloaded = d.get('downloaded_bytes', 0)
-                    percent = (downloaded / total) * 100
-                elif 'total_bytes_estimate' in d:
-                    total = d['total_bytes_estimate']
-                    downloaded = d.get('downloaded_bytes', 0)
-                    percent = (downloaded / total) * 100
-                else:
-                    percent = 0
+            p = d.get('downloaded_bytes', 0)
+            t = d.get('total_bytes') or d.get('total_bytes_estimate')
+            if t:
+                percent = (p / t) * 100
+                speed = d.get('speed', 0) / 1024 / 1024
+                self.update_ui(percent, f"{speed:.1f} MB/s")
 
-                # Get speed
-                speed = d.get('speed', 0)
-                if speed:
-                    speed_mb = speed / 1024 / 1024
-                    speed_str = f"{speed_mb:.1f} MB/s"
-                else:
-                    speed_str = "Calculating..."
-
-                # Update UI
-                self.update_ui(percent, speed_str)
-            except:
-                pass
-
-        elif d['status'] == 'finished':
-            self.update_ui(100, "Processing...")
-
-        elif d['status'] == 'error':
-            self.show_notification("❌ Download error")
+    @mainthread
+    def update_ui(self, p, s):
+        self.root.ids.progress_bar.value = p
+        self.root.ids.progress_label.text = f"{int(p)}%"
+        self.root.ids.status_label.text = f"Downloading at {s}"
 
     def download_engine(self, url):
-        """Main download engine"""
-        path = None
-
+        path = ""
         if platform == 'android':
             try:
-                # Method 1: External Media Directory (Best for Android 10+)
                 context = autoclass('org.kivy.android.PythonActivity').mActivity
                 media_dirs = context.getExternalMediaDirs()
-                if media_dirs and len(media_dirs) > 0:
-                    path = os.path.join(media_dirs[0].getAbsolutePath(), "NexDownloads")
-                    print(f"✅ Using Media Dir: {path}")
-            except Exception as e:
-                print(f"Media Dir error: {e}")
-
-        # Fallback paths
-        if not path:
-            try:
-                path = os.path.join(self.user_data_dir, "NexDownloads")
-                print(f"✅ Using User Data Dir: {path}")
+                path = os.path.join(media_dirs[0].getAbsolutePath(), "NexDownloads")
             except:
-                pass
-
-        if not path:
-            path = os.path.join(os.getcwd(), "NexDownloads")
-
-        # Create directory
-        try:
-            os.makedirs(path, exist_ok=True)
-            self.show_notification(f"📁 Saving to: {path}")
-        except Exception as e:
-            print(f"Dir creation error: {e}")
-            path = os.getcwd()
-            os.makedirs(path, exist_ok=True)
-
-        # Prepare download options
-        if self.selected_type == "Video":
-            format_spec = f'best[height<={self.selected_quality}][ext=mp4]/best[height<={self.selected_quality}]/best'
+                path = os.path.join(self.user_data_dir, "NexDownloads")
         else:
-            format_spec = 'bestaudio/best'
+            path = "NexDownloads"
+
+        os.makedirs(path, exist_ok=True)
 
         ydl_opts = {
             'outtmpl': f'{path}/%(title)s.%(ext)s',
             'progress_hooks': [self.progress_hook],
-            'format': format_spec,
-            'noplaylist': True,
-            'quiet': True,
-            'no_warnings': True,
-            'ignoreerrors': True,
+            'format': f'best[height<={self.selected_quality}]' if self.selected_type == "Video" else 'bestaudio',
             'logger': MyLogger(),
+            'quiet': True,
         }
 
-        # Audio post-processing
-        if self.selected_type == "Audio (MP3)":
-            ydl_opts.update({
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-            })
-
         try:
-            self.show_notification("⏬ Downloading...")
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                if self.should_cancel: return
                 info = ydl.extract_info(url, download=True)
-                filename = ydl.prepare_filename(info)
-
-                # Handle audio filename
-                if self.selected_type == "Audio (MP3)":
-                    filename = filename.rsplit('.', 1)[0] + '.mp3'
-
-                self.show_notification(f"✅ Saved: {os.path.basename(filename)}")
-                self.finalize("✅ Download completed!")
-
-                # Send notification
-                try:
-                    notification.notify(
-                        title="NexDownloader Pro",
-                        message=f"Download complete!\n{os.path.basename(filename)}",
-                        timeout=5
-                    )
-                except:
-                    pass
-
+            self.finalize("Download Complete!")
         except Exception as e:
-            error_msg = str(e)
-            print(f"Download error: {error_msg}")
-            self.show_notification(f"❌ Error: {error_msg[:50]}")
-            self.finalize(f"❌ Error: {error_msg[:50]}")
-
-    def show_notification(self, message):
-        """Show status message"""
-        try:
-            self.root.ids.status_label.text = message
-        except:
-            pass
+            msg = "Stopped" if "CANCELLED" in str(e) else f"Error: {str(e)[:30]}"
+            self.finalize(msg)
 
     @mainthread
-    def update_ui(self, percent, speed):
-        """Update progress UI"""
-        try:
-            self.root.ids.progress_bar.value = percent
-            self.root.ids.progress_label.text = f"{int(percent)}%"
-            if speed:
-                self.root.ids.status_label.text = f"Downloading... {speed}"
-        except:
-            pass
-
-    @mainthread
-    def toggle_buttons(self, downloading):
-        """Toggle between start/cancel buttons"""
-        try:
-            d_btn = self.root.ids.download_btn
-            c_btn = self.root.ids.cancel_btn
-
-            if downloading:
-                d_btn.size_hint_x = 0
-                d_btn.opacity = 0
-                d_btn.disabled = True
-                c_btn.size_hint_x = 1
-                c_btn.opacity = 1
-                c_btn.disabled = False
-            else:
-                d_btn.size_hint_x = 1
-                d_btn.opacity = 1
-                d_btn.disabled = False
-                c_btn.size_hint_x = 0
-                c_btn.opacity = 0
-                c_btn.disabled = True
-        except:
-            pass
+    def toggle_ui(self, active):
+        d, c = self.root.ids.download_btn, self.root.ids.cancel_btn
+        if active:
+            d.size_hint_x, d.opacity, d.disabled = 0, 0, True
+            c.size_hint_x, c.opacity, c.disabled = 1, 1, False
+        else:
+            d.size_hint_x, d.opacity, d.disabled = 1, 1, False
+            c.size_hint_x, c.opacity, c.disabled = 0, 0, True
 
     def cancel_download(self):
-        """Cancel ongoing download"""
         self.should_cancel = True
-        self.show_notification("⏹️ Cancelling...")
+        self.root.ids.status_label.text = "Cancelling..."
 
     @mainthread
     def finalize(self, msg):
-        """Finalize download"""
-        self.show_notification(msg)
-        self.toggle_buttons(False)
-        # Reset progress
-        try:
-            self.root.ids.progress_bar.value = 0
-            self.root.ids.progress_label.text = "0%"
-        except:
-            pass
-
-    def toggle_theme(self):
-        """Toggle dark/light theme"""
-        self.theme_cls.theme_style = "Light" if self.theme_cls.theme_style == "Dark" else "Dark"
+        self.root.ids.status_label.text = msg
+        self.toggle_ui(False)
 
 
 if __name__ == "__main__":
